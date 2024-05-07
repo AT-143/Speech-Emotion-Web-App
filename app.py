@@ -95,7 +95,7 @@ def get_melspec(audio):
 # @st.cache
 def get_mfccs(audio, limit):
     y, sr = librosa.load(audio)
-    a = librosa.feature.mfcc(y, sr=sr, n_mfcc=40)
+    a = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=40)
     if a.shape[1] > limit:
         mfccs = a[:, :limit]
     elif a.shape[1] < limit:
@@ -189,9 +189,9 @@ def main():
                         try:
                             wav, sr = librosa.load(path, sr=44100)
                             Xdb = get_melspec(path)[1]
-                            mfccs = librosa.feature.mfcc(wav, sr=sr)
-                            # # display audio
-                            # st.audio(audio_file, format='audio/wav', start_time=0)
+                            mfccs = librosa.feature.mfcc(y=wav, sr=sr)
+                            # display audio
+                            st.audio(audio_file, format='audio/wav', start_time=0)
                         except Exception as e:
                             audio_file = None
                             st.error(f"Error {e} - wrong format of the file. Try another .wav file.")
@@ -199,27 +199,21 @@ def main():
                         st.error("Unknown error")
                 else:
                     if st.button("Try test file"):
-                        wav, sr = librosa.load("test.wav", sr=44100)
-                        Xdb = get_melspec("test.wav")[1]
-                        mfccs = librosa.feature.mfcc(wav, sr=sr)
+                        wav, sr = librosa.load("C:/Users/Administrator/Desktop/project prasanna/speech-emotion-webapp/test.wav", sr=44100)
+                        Xdb = get_melspec("C:/Users/Administrator/Desktop/project prasanna/speech-emotion-webapp/test.wav")[1]
+                        mfccs = librosa.feature.mfcc(y=wav, sr=sr)
                         # display audio
-                        st.audio("test.wav", format='audio/wav', start_time=0)
-                        path = "test.wav"
+                        st.audio("C:/Users/Administrator/Desktop/project prasanna/speech-emotion-webapp/test.wav", format='audio/wav', start_time=0)
+                        path = "C:/Users/Administrator/Desktop/project prasanna/speech-emotion-webapp/test.wav"
                         audio_file = "test"
             with col2:
                 if audio_file is not None:
-                    fig = plt.figure(figsize=(10, 2))
-                    fig.set_facecolor('#d1d1e0')
-                    plt.title("Wave-form")
-                    librosa.display.waveplot(wav, sr=44100)
-                    plt.gca().axes.get_yaxis().set_visible(False)
-                    plt.gca().axes.get_xaxis().set_visible(False)
-                    plt.gca().axes.spines["right"].set_visible(False)
-                    plt.gca().axes.spines["left"].set_visible(False)
-                    plt.gca().axes.spines["top"].set_visible(False)
-                    plt.gca().axes.spines["bottom"].set_visible(False)
-                    plt.gca().axes.set_facecolor('#d1d1e0')
-                    st.write(fig)
+                    plt.figure(figsize=(10, 4))
+                    plt.plot(wav)
+                    plt.xlabel('Time')
+                    plt.ylabel('Amplitude')
+                    plt.title('Waveform')
+                    plt.show()
                 else:
                     pass
             #     st.write("Record audio file")
